@@ -36,24 +36,36 @@ public class MainClass {
             while (executeQuery.next()) {
                 int id_spec = executeQuery.getInt("id_spec");
                 int ves = executeQuery.getInt("ves");
-                byte[] dis = executeQuery.getBytes("dis");
-                System.out.println(id_spec + "\t" + ves);
+                Blob blob = executeQuery.getBlob("dis");
+
+                System.out.print(id_spec + "\t" + ves);
+                if (blob != null) {
+                    System.out.print("\tdis len = " + blob.length());
+                }
+                System.out.println();
             }
 
             executeQuery.close();
             stmt.close();
 
             PreparedStatement statement = connection.prepareStatement("INSERT INTO Table_1(id_spec, ves, dis) VALUES (?, ?, ?)");
-            statement.setInt(1, 2);
-            statement.setInt(2, 223);
+            statement.setInt(1, 66);
+            statement.setInt(2, 77);
 
             ArrayList<Ddt> tt = new ArrayList<>();
-            for (int i = 16_380; i < 16_384; i++) {
+            for (int i = 1; i < 200_001; i++) {
                 tt.add(new Ddt(i, i));
             }
 
             byte[] q = Ddt.toBytes( tt.toArray(new Ddt[tt.size()]));
-            q = null;
+
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(q);
+
+            statement.setBlob(3, blob);
+
+            statement.executeUpdate();
+            statement.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
