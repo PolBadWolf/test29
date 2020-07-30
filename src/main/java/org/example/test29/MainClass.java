@@ -31,7 +31,12 @@ public class MainClass {
 
             Statement stmt = connection.createStatement();
 
-            ResultSet executeQuery = stmt.executeQuery("SELECT * FROM spc1.dbo.Table_1");
+            //ResultSet executeQuery = stmt.executeQuery("SELECT * FROM spc1.dbo.Table_1");
+            ResultSet executeQuery = stmt.executeQuery("SELECT [id]\n" +
+                    "      ,[id_spec]\n" +
+                    "      ,[ves]\n" +
+//                    "      ,[dis]\n" +
+                    "  FROM [spc1].[dbo].[Table_1]");
 
             while (executeQuery.next()) {
                 int id_spec = executeQuery.getInt("id_spec");
@@ -40,7 +45,7 @@ public class MainClass {
 
                 System.out.print(id_spec + "\t" + ves);
                 if (blob != null) {
-                    System.out.print("\tdis len = " + blob.length());
+                    System.out.print("\tdis len = " + blob.length() / 6);
                 }
                 System.out.println();
             }
@@ -53,7 +58,7 @@ public class MainClass {
             statement.setInt(2, 77);
 
             ArrayList<Ddt> tt = new ArrayList<>();
-            for (int i = 1; i < 200_001; i++) {
+            for (int i = 0; i < 720_000; i++) {
                 tt.add(new Ddt(i, i));
             }
 
@@ -63,7 +68,7 @@ public class MainClass {
 
             statement.setBlob(3, blob);
 
-            statement.executeUpdate();
+            //statement.executeUpdate();
             statement.close();
 
 
